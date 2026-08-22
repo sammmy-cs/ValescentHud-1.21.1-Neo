@@ -1,4 +1,4 @@
-package com.sammmy.valescentbar;
+package com.sammmy.valescenthud;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,51 +22,51 @@ public class Config {
     private Config(ModConfigSpec.Builder builder) {
         enableUnderlay = builder
                 .comment("Enable rendering for the hotbar underlay")
-                .translation("valescentbar.config.enableUnderlay")
+                .translation("valescenthud.config.enableUnderlay")
                 .define("enableUnderlay", false);
         underlayOffsetX = builder
                 .comment("Set the horizontal offset for the hotbar underlay")
-                .translation("valescentbar.config.underlayOffsetX")
+                .translation("valescenthud.config.underlayOffsetX")
                 .defineInRange("underlayOffsetX", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         underlayOffsetY = builder
                 .comment("Set the vertical offset for the hotbar underlay")
-                .translation("valescentbar.config.underlayOffsetY")
+                .translation("valescenthud.config.underlayOffsetY")
                 .defineInRange("underlayOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         enableOverlay = builder
                 .comment("Enable rendering for the hotbar overlay")
-                .translation("valescentbar.config.enableOverlay")
+                .translation("valescenthud.config.enableOverlay")
                 .define("enableOverlay", false);
         overlayOffsetX = builder
                 .comment("Set the horizontal offset for the hotbar overlay")
-                .translation("valescentbar.config.overlayOffsetX")
+                .translation("valescenthud.config.overlayOffsetX")
                 .defineInRange("overlayOffsetX", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         overlayOffsetY = builder
                 .comment("Set the vertical offset for the hotbar overlay")
-                .translation("valescentbar.config.overlayOffsetY")
+                .translation("valescenthud.config.overlayOffsetY")
                 .defineInRange("overlayOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         enableLevelOffset = builder
                 .comment("Enable offsetting the experience level number")
-                .translation("valescentbar.config.enableLevelOffset")
+                .translation("valescenthud.config.enableLevelOffset")
                 .define("enableLevelOffset", false);
         levelOffsetX = builder
                 .comment("Set the horizontal offset for the level number")
-                .translation("valescentbar.config.levelOffsetX")
+                .translation("valescenthud.config.levelOffsetX")
                 .defineInRange("levelOffsetX", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         levelOffsetY = builder
                 .comment("Set the vertical offset for the level number")
-                .translation("valescentbar.config.levelOffsetY")
+                .translation("valescenthud.config.levelOffsetY")
                 .defineInRange("levelOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         enableOffhandOffset = builder
                 .comment("Enable offsetting the offhand hud")
-                .translation("valescentbar.config.enableOffhandOffset")
+                .translation("valescenthud.config.enableOffhandOffset")
                 .define("enableOffhandOffset", false);
         offhandOffsetX = builder
                 .comment("Set the horizontal offset for the offhand hud")
-                .translation("valescentbar.config.offhandOffsetX")
+                .translation("valescenthud.config.offhandOffsetX")
                 .defineInRange("offhandOffsetX", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         offhandOffsetY = builder
                 .comment("Set the vertical offset for the offhand hud")
-                .translation("valescentbar.config.offhandOffsetY")
+                .translation("valescenthud.config.offhandOffsetY")
                 .defineInRange("offhandOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
