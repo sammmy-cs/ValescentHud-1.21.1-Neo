@@ -15,6 +15,9 @@ public class Config {
     public final ModConfigSpec.BooleanValue enableLevelOffset;
     public final ModConfigSpec.IntValue levelOffsetX;
     public final ModConfigSpec.IntValue levelOffsetY;
+    public final ModConfigSpec.BooleanValue enableOffhandOffset;
+    public final ModConfigSpec.IntValue offhandOffsetX;
+    public final ModConfigSpec.IntValue offhandOffsetY;
 
     private Config(ModConfigSpec.Builder builder) {
         enableUnderlay = builder
@@ -53,6 +56,18 @@ public class Config {
                 .comment("Set the vertical offset for the level number")
                 .translation("valescentbar.config.levelOffsetY")
                 .defineInRange("levelOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        enableOffhandOffset = builder
+                .comment("Enable offsetting the offhand hud")
+                .translation("valescentbar.config.enableOffhandOffset")
+                .define("enableOffhandOffset", false);
+        offhandOffsetX = builder
+                .comment("Set the horizontal offset for the offhand hud")
+                .translation("valescentbar.config.offhandOffsetX")
+                .defineInRange("offhandOffsetX", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        offhandOffsetY = builder
+                .comment("Set the vertical offset for the offhand hud")
+                .translation("valescentbar.config.offhandOffsetY")
+                .defineInRange("offhandOffsetY", 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     static {
