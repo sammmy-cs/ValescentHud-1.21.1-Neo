@@ -1,16 +1,21 @@
 package com.sammmy.valescentbar.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.sammmy.valescentbar.Config;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Gui.class)
 public class GuiMixin {
@@ -50,6 +55,78 @@ public class GuiMixin {
         guiGraphics.pose().translate(0.0F, 0.0F, -90.0F);
         guiGraphics.blit(OVERLAY, centerX, hotbarY, 0, 0, 256, 96, 256, 96);
         guiGraphics.pose().popPose();
+    }
+
+    @ModifyArgs(
+            method = "renderItemHotbar",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V",
+                    ordinal = 2))
+
+    private void valescent$offHandLeftSpriteOffset(Args args) {
+        if(!config.enableOffhandOffset.get()) {
+            return;
+        }
+        int x = args.get(1);
+        int y = args.get(2);
+
+        args.set(1, x += config.offhandOffsetX.get());
+        args.set(2, y += config.offhandOffsetY.get());
+    }
+
+    @ModifyArgs(
+            method = "renderItemHotbar",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/Gui;renderSlot(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/client/DeltaTracker;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;I)V",
+                    ordinal = 1))
+
+    private void valescent$offHandLeftItemOffset(Args args) {
+        if(!config.enableOffhandOffset.get()) {
+            return;
+        }
+        int x = args.get(1);
+        int y = args.get(2);
+
+        args.set(1, x += config.offhandOffsetX.get());
+        args.set(2, y += config.offhandOffsetY.get());
+    }
+
+    @ModifyArgs(
+            method = "renderItemHotbar",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/Gui;renderSlot(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/client/DeltaTracker;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;I)V",
+                    ordinal = 2))
+
+    private void valescent$offHandRightItemOffset(Args args) {
+        if(!config.enableOffhandOffset.get()) {
+            return;
+        }
+        int x = args.get(1);
+        int y = args.get(2);
+
+        args.set(1, x -= config.offhandOffsetX.get());
+        args.set(2, y += config.offhandOffsetY.get());
+    }
+
+    @ModifyArgs(
+            method = "renderItemHotbar",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V",
+                    ordinal = 3))
+
+    private void valescent$offHandRightSpriteOffset(Args args) {
+        if(!config.enableOffhandOffset.get()) {
+            return;
+        }
+        int x = args.get(1);
+        int y = args.get(2);
+
+        args.set(1, x -= config.offhandOffsetX.get());
+        args.set(2, y += config.offhandOffsetY.get());
     }
 
     @Redirect(
