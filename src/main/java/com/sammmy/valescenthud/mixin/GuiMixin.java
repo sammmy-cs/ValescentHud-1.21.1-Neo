@@ -1,6 +1,6 @@
-package com.sammmy.valescentbar.mixin;
+package com.sammmy.valescenthud.mixin;
 
-import com.sammmy.valescentbar.Config;
+import com.sammmy.valescenthud.Config;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
@@ -17,11 +17,11 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Gui.class)
 public class GuiMixin {
     private static final Config config = Config.CONFIG;
-    private static final ResourceLocation UNDERLAY = ResourceLocation.fromNamespaceAndPath("valescentbar", "textures/gui/underlay.png");
-    private static final ResourceLocation OVERLAY = ResourceLocation.fromNamespaceAndPath("valescentbar", "textures/gui/overlay.png");
+    private static final ResourceLocation UNDERLAY = ResourceLocation.fromNamespaceAndPath("valescenthud", "textures/gui/underlay.png");
+    private static final ResourceLocation OVERLAY = ResourceLocation.fromNamespaceAndPath("valescenthud", "textures/gui/overlay.png");
 
     @Inject(method = "renderItemHotbar", at = @At("HEAD"))
-    private void renderUnderlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void valescent$renderUnderlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!config.enableUnderlay.get()) {
             return;
         }
@@ -38,7 +38,7 @@ public class GuiMixin {
     }
 
     @Inject(method = "renderItemHotbar", at = @At("TAIL"))
-    private void renderOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void valescent$renderOverlay(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (!config.enableOverlay.get()) {
             return;
         }
@@ -132,7 +132,7 @@ public class GuiMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I"))
 
-    private int redirectDrawString(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color, boolean dropShadow) {
+    private int valescent$redirectDrawString(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color, boolean dropShadow) {
         if(!config.enableLevelOffset.get()) {
             return guiGraphics.drawString(font, text, x, y, color, dropShadow);
         }
