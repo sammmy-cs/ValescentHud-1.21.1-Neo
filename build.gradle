@@ -95,7 +95,7 @@ allprojects {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    implementation "dev.isxander:yet-another-config-lib:${yacl_version}"
+    compileOnly "dev.isxander:yet-another-config-lib:${yacl_version}"
 
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
