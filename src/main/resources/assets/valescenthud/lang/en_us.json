@@ -1,8 +1,12 @@
 {
   "valescenthud.config.enableUnderlay": "Underlay Enabled",
+  "valescenthud.config.underlaySizeX": "Width",
+  "valescenthud.config.underlaySizeY": "Height",
   "valescenthud.config.underlayOffsetX": "Offset X",
   "valescenthud.config.underlayOffsetY": "Offset Y",
   "valescenthud.config.enableOverlay": "Overlay Enabled",
+  "valescenthud.config.overlaySizeX": "Width",
+  "valescenthud.config.overlaySizeY": "Height",
   "valescenthud.config.overlayOffsetX": "Offset X",
   "valescenthud.config.overlayOffsetY": "Offset Y",
   "valescenthud.config.enableLevelOffset": "Level Offset Enabled",
