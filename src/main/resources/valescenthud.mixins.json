@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "GuiMixin"
+    "ExperienceMixin",
+    "HotbarMixin"
   ],
   "injectors": {
     "defaultRequire": 1
