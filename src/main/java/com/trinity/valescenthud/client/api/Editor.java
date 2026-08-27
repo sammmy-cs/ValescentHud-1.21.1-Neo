@@ -1,19 +1,21 @@
-package com.xnity.valescenthud.client.api;
+package com.trinity.valescenthud.client.api;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public final class Editor extends Screen {
     private final Screen parent;
 
     private static final double SNAP_DISTANCE = 64.0;
 
-    private static final SequencedSet<Widget> selection = new LinkedHashSet<>(); //convert to array?
-    private static Widget hoveredWidget;
+    private static final SequencedSet<Widget<?>> selection = new LinkedHashSet<>(); //convert to array?
+    private static Widget<?> hoveredWidget;
     private boolean dragging;
 
     private final double[] anchorX = new double[Anchor.getAnchors().length];
@@ -26,7 +28,7 @@ public final class Editor extends Screen {
         this.parent = parent;
     }
 
-    public static Set<Widget> getSelection() {
+    public static Set<Widget<?>> getSelection() {
         return selection;
     }
 
@@ -44,6 +46,8 @@ public final class Editor extends Screen {
         doAnchorUpdate = false;
     }
 
+    private static final Map<String, Integer> fontSizes = new HashMap<>();
+
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         updateAnchors();
@@ -53,11 +57,11 @@ public final class Editor extends Screen {
         }
         hoveredWidget = getHovered(mouseX, mouseY);
 
-        List<Widget> widgets = Handler.getWidgets();
+        List<Widget<?>> widgets = Handler.getWidgets();
 
         drawAnchors(guiGraphics);
 
-        for(Widget widget: widgets) {
+        for(Widget<?> widget: widgets) {
             if(!selection.isEmpty() && selection.getLast() == widget) {
                 continue;
             }
@@ -65,11 +69,34 @@ public final class Editor extends Screen {
             widget.highlight(guiGraphics, widget == hoveredWidget);
         }
 
-        if(!selection.isEmpty()) {
-            Widget lastSelected = selection.getLast();
-            lastSelected.render(guiGraphics);
-            lastSelected.highlight(guiGraphics, lastSelected == hoveredWidget);
+        if (!selection.isEmpty()) {
+            Widget<?> widget = selection.getLast();
+            Point pos = widget.getPos();
+            String id = widget.getId();
+
+            widget.render(guiGraphics);
+            widget.highlight(guiGraphics, widget == hoveredWidget);
+
+            final float scale = 0.4f;
+            final float dist = 3.0f;
+            int width = fontSizes.computeIfAbsent(id, font::width);
+            float height = font.lineHeight * scale;
+            float half = width * scale * 0.5f;
+            float x = pos.x + widget.getWidth() * 0.5f;
+            float y = pos.y - height - dist;
+
+            if(y < 0) {
+                y = pos.y + widget.getHeight() + dist;
+            }
+            x = Math.clamp(x, half - 4.0f, guiGraphics.guiWidth() - half + 4.0f);
+
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(x, y, 0);
+            guiGraphics.pose().scale(scale, scale, 1.0f);
+            guiGraphics.drawString(font, id, -width / 2, 0, 0xFFFFFFFF);
+            guiGraphics.pose().popPose();
         }
+
     }
 
     private void drawAnchors(GuiGraphics guiGraphics) {
@@ -78,7 +105,7 @@ public final class Editor extends Screen {
         Set<Anchor> selectedAnchors = EnumSet.noneOf(Anchor.class);
         Set<Anchor> previewAnchors = EnumSet.noneOf(Anchor.class);
 
-        for(Widget widget: selection) {
+        for(Widget<?> widget: selection) {
             selectedAnchors.add(widget.getAnchor());
             if(dragging) {
                 Anchor preview = widget.getPreview();
@@ -140,11 +167,11 @@ public final class Editor extends Screen {
         }
     }
 
-    private Widget getHovered(double mouseX, double mouseY) {
-        List<Widget> widgets = Handler.getWidgets();
+    private Widget<?> getHovered(double mouseX, double mouseY) {
+        List<Widget<?>> widgets = Handler.getWidgets();
 
         for(int i = widgets.size() - 1; i >= 0; i--) {
-            Widget widget = widgets.get(i);
+            Widget<?> widget = widgets.get(i);
 
             if(widget.contains(mouseX, mouseY)) {
                 return widget;
@@ -177,17 +204,17 @@ public final class Editor extends Screen {
     }
 
     private void selectAnchor(Anchor anchor) {
-        for(Widget widget: selection) {
+        for(Widget<?> widget: selection) {
             widget.setAnchor(anchor);
         }
     }
 
-    private void selectOnly(Widget widget) {
+    private void selectOnly(Widget<?> widget) {
         selection.clear();
         selection.add(widget);
     }
 
-    private void toggleSelection(Widget widget) {
+    private void toggleSelection(Widget<?> widget) {
         if(!selection.add(widget)) {
             selection.remove(widget);
         }
@@ -196,7 +223,6 @@ public final class Editor extends Screen {
     private double getAnchorX(Anchor anchor) {
         return anchorX[anchor.ordinal()];
     }
-
     private double getAnchorY(Anchor anchor) {
         return anchorY[anchor.ordinal()];
     }
@@ -231,7 +257,7 @@ public final class Editor extends Screen {
                 }
             }
 
-            for(Widget widget: selection) {
+            for(Widget<?> widget: selection) {
                 widget.onDrag(mouseX, mouseY);
             }
             dragging = true;
@@ -252,7 +278,7 @@ public final class Editor extends Screen {
             return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
         }
 
-        for(Widget widget : selection) {
+        for(Widget<?> widget : selection) {
             widget.setDrag(mouseX, mouseY);
             widget.clamp(width, height);
             widget.updSnapPreview(SNAP_DISTANCE);
@@ -267,7 +293,7 @@ public final class Editor extends Screen {
         }
         dragging = false;
 
-        for(Widget widget : selection) {
+        for(Widget<?> widget : selection) {
             widget.clamp(width, height);
             widget.setNearest(SNAP_DISTANCE);
             widget.onDragEnd();
@@ -283,7 +309,7 @@ public final class Editor extends Screen {
 
     @Override
     public void onClose() {
-        for(Widget widget : selection) {
+        for(Widget<?> widget : selection) {
             widget.onDragEnd();
         }
         dragging = false;
