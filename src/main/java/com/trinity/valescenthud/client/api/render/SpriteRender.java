@@ -3,11 +3,11 @@ package com.trinity.valescenthud.client.api.render;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
-public final class Sprite implements Renderer {
+public final class SpriteRender implements Renderer {
 
     private final ResourceLocation texture;
 
-    public Sprite(ResourceLocation texture) {
+    public SpriteRender(ResourceLocation texture) {
         this.texture = texture;
     }
 
