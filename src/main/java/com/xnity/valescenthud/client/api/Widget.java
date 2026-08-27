@@ -21,12 +21,12 @@ public final class Widget {
     private double dragY;
     private Anchor snapPreview;
 
-    public Widget(ResourceLocation texture, Anchor anchor, double offsetX, double offsetY, int width, int height) {
+    public Widget(ResourceLocation texture, int x, int y, int width, int height, Anchor anchor) {
         this.texture = texture;
+        this.position.x = x;
+        this.position.y = y;
         this.width = width;
         this.height = height;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
         this.anchor = anchor;
     }
 
