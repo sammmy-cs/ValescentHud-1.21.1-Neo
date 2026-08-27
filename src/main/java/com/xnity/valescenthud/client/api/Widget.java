@@ -32,11 +32,6 @@ public final class Widget {
 
     public void render(GuiGraphics guiGraphics) {
         Point pos = getPos();
-        guiGraphics.blit(texture, pos.x, pos.y, 0, 0, width, height, width, height);
-    }
-
-    public void renderSprite(GuiGraphics guiGraphics) {
-        Point pos = getPos();
         guiGraphics.blitSprite(texture, pos.x, pos.y, width, height);
     }
 
