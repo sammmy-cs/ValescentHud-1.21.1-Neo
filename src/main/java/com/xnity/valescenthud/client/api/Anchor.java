@@ -36,8 +36,13 @@ public enum Anchor {
     public double getOffsetY(int height) {
         return height * anchorY;
     }
-
-    public static Anchor[] getAnchors() { return VALUES; }
-    public int getColumn() { return column; }
-    public int getRow() { return row; }
+    public int getColumn() {
+        return column;
+    }
+    public int getRow() {
+        return row;
+    }
+    public static Anchor[] getAnchors() {
+        return VALUES;
+    }
 }
