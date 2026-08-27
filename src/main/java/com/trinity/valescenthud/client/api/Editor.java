@@ -77,8 +77,8 @@ public final class Editor extends Screen {
             widget.render(guiGraphics);
             widget.highlight(guiGraphics, widget == hoveredWidget);
 
-            final float scale = 0.4f;
-            final float dist = 3.0f;
+            final float scale = 0.45f;
+            final float dist = 4.0f;
             int width = fontSizes.computeIfAbsent(id, font::width);
             float height = font.lineHeight * scale;
             float half = width * scale * 0.5f;
@@ -88,7 +88,7 @@ public final class Editor extends Screen {
             if(y < 0) {
                 y = pos.y + widget.getHeight() + dist;
             }
-            x = Math.clamp(x, half - 4.0f, guiGraphics.guiWidth() - half + 4.0f);
+            x = Math.clamp(x, half, guiGraphics.guiWidth() - half);
 
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(x, y, 0);
