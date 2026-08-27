@@ -1,4 +1,4 @@
-package com.xnity.valescenthud.client.api;
+package com.trinity.valescenthud.client.api;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -15,11 +15,11 @@ public final class Widget {
     private int height;
     private double offsetX;
     private double offsetY;
-    private Anchor anchor;
-    public boolean shouldUpdate = true;
     private double dragX;
     private double dragY;
+    private Anchor anchor;
     private Anchor snapPreview;
+    public boolean shouldUpdate = true;
 
     public Widget(ResourceLocation texture, int x, int y, int width, int height, Anchor anchor) {
         this.texture = texture;
@@ -34,11 +34,6 @@ public final class Widget {
         Point pos = getPos();
         guiGraphics.blitSprite(texture, pos.x, pos.y, width, height);
     }
-
-    /*public void render(GuiGraphics guiGraphics, int customWidth, int customHeight) {
-        Point pos = getPos();
-        guiGraphics.blit(texture, pos.x, pos.y, 0, 0, customWidth, customHeight, width, height);
-    }*/
 
     public Point getPos() {
         if(shouldUpdate) {
