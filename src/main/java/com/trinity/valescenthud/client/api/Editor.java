@@ -232,6 +232,25 @@ public final class Editor extends Screen {
         if(button == 0) {
             dragging = false;
 
+            Widget<?> clicked = getHovered(mouseX, mouseY);
+
+            if(clicked != null) {
+                if(hasShiftDown()) {
+                    if(!selection.add(clicked)) {
+                        selection.remove(clicked);
+                    }
+                    if(!selection.contains(clicked)) {
+                        return true;
+                    }
+                } else if(!selection.contains(clicked)) {
+                    selectOnly(clicked);
+                }
+                for(Widget<?> widget : selection) {
+                    widget.onDrag(mouseX, mouseY);
+                }
+                dragging = true;
+                return true;
+            }
             if(!selection.isEmpty()) {
                 Anchor hoveredAnchor = getAnchor(mouseX, mouseY);
                 if(hoveredAnchor != null) {
@@ -239,38 +258,17 @@ public final class Editor extends Screen {
                     return true;
                 }
             }
-            if(hoveredWidget == null) {
-                selection.clear();
-                return true;
-            }
-            if(hasShiftDown()) {
-                if(!selection.add(hoveredWidget)) {
-                    selection.remove(hoveredWidget);
-                }
-
-                if(!selection.contains(hoveredWidget)) {
-                    return true;
-                }
-            } else {
-                if(!selection.contains(hoveredWidget)) {
-                    selectOnly(hoveredWidget);
-                }
-            }
-
-            for(Widget<?> widget: selection) {
-                widget.onDrag(mouseX, mouseY);
-            }
-            dragging = true;
-
-            return true;
-        } else if(button == 1) {
-
-            //draw options
-
+            selection.clear();
             return true;
         }
+        if(button == 1) {
+            //quickmenu draw selection
+            return true;
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
+
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
