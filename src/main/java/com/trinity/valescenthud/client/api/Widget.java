@@ -1,5 +1,6 @@
 package com.trinity.valescenthud.client.api;
 
+import com.trinity.valescenthud.client.api.render.Renderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import java.awt.Point;
@@ -9,7 +10,7 @@ public final class Widget {
     private static final int HANDLE_SIZE = 5;
     //private static final int ANCHOR_SIZE = 4;
 
-    private final ResourceLocation texture;
+    private final Renderer renderer;
     private final Point position = new Point(0, 0);
     private int width;
     private int height;
@@ -21,10 +22,10 @@ public final class Widget {
     private Anchor snapPreview;
     public boolean shouldUpdate = true;
 
-    public Widget(ResourceLocation texture, int x, int y, int width, int height, Anchor anchor) {
-        this.texture = texture;
-        this.position.x = x;
-        this.position.y = y;
+    public Widget(Renderer renderer, double offsetX, double offsetY, int width, int height, Anchor anchor) {
+        this.renderer = renderer;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.width = width;
         this.height = height;
         this.anchor = anchor;
@@ -32,7 +33,7 @@ public final class Widget {
 
     public void render(GuiGraphics guiGraphics) {
         Point pos = getPos();
-        guiGraphics.blitSprite(texture, pos.x, pos.y, width, height);
+        renderer.render(guiGraphics, pos.x, pos.y, width, height);
     }
 
     public Point getPos() {
@@ -89,12 +90,6 @@ public final class Widget {
         }
         this.width = width;
         this.height = height;
-        shouldUpdate = true;
-    }
-
-    public void setOffset(double x, double y) {
-        this.offsetX = x;
-        this.offsetY = y;
         shouldUpdate = true;
     }
 
@@ -191,11 +186,14 @@ public final class Widget {
         }
     }
 
-    public ResourceLocation getTexture() { return texture; }
     //public int getWidth() { return width; }
     //public int getHeight() { return height; }
     //public double getOffsetX() { return offsetX; }
     //public double getOffsetY() { return offsetY; }
-    public Anchor getPreview() { return snapPreview; }
-    public Anchor getAnchor() { return anchor; }
+    public Anchor getPreview() {
+        return snapPreview;
+    }
+    public Anchor getAnchor() {
+        return anchor;
+    }
 }
