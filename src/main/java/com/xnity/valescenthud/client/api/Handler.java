@@ -1,12 +1,12 @@
 package com.xnity.valescenthud.client.api;
 
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.client.event.RenderFrameEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +21,7 @@ public final class Handler {
     private static final List<Widget> READ_WIDGETS = Collections.unmodifiableList(WIDGETS);
 
     private static final Minecraft minecraft = Minecraft.getInstance();
+    private static final Window window = minecraft.getWindow();
 
     public static int guiWidth, guiHeight;
 
@@ -32,14 +33,13 @@ public final class Handler {
     }
 
     @SubscribeEvent
-    public static void onGuiRender(RenderGuiEvent.Pre event) {
-        GuiGraphics guiGraphics = event.getGuiGraphics();
-        int actualWidth = guiGraphics.guiWidth();
-        int actualHeight = guiGraphics.guiHeight();
+    public static void onFrameRender(RenderFrameEvent.Pre event) {
+        int actualWidth = window.getGuiScaledWidth();
+        int actualHeight = window.getGuiScaledHeight();
 
         if(guiWidth != actualWidth || guiHeight != actualHeight) {
-            guiWidth = guiGraphics.guiWidth();
-            guiHeight = guiGraphics.guiHeight();
+            guiWidth = actualWidth;
+            guiHeight = actualHeight;
 
             Editor.doAnchorUpdate = true;
             for(Widget widget: WIDGETS) {
