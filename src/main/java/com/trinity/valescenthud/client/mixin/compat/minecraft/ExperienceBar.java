@@ -3,6 +3,7 @@ package com.trinity.valescenthud.client.mixin.compat.minecraft;
 import com.trinity.valescenthud.client.api.Anchor;
 import com.trinity.valescenthud.client.api.Handler;
 import com.trinity.valescenthud.client.api.Widget;
+import com.trinity.valescenthud.client.api.render.SpriteRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,26 +24,20 @@ public class ExperienceBar {
 
     @Shadow @Final
     private static ResourceLocation EXPERIENCE_BAR_BACKGROUND_SPRITE;
-
     @Shadow @Final
     private static ResourceLocation EXPERIENCE_BAR_PROGRESS_SPRITE;
+    @Shadow @Final
+    private Minecraft minecraft;
 
     @Unique
     private static final Widget valescent$experienceBarBackground = Handler.addWidget(new Widget(
-            EXPERIENCE_BAR_BACKGROUND_SPRITE, 0, -22, 182, 5, Anchor.BOTTOM
+            new SpriteRender(EXPERIENCE_BAR_BACKGROUND_SPRITE), 0, -22, 182, 5, Anchor.BOTTOM
     ));
 
-    @Unique
-    private static Minecraft minecraft = Minecraft.getInstance();
 
     @Inject(method = "renderExperienceBar", at = @At("HEAD"), cancellable = true)
-    private static void valescent$renderExperienceBarWidget(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
-
-        Player player = minecraft.player;
-        if(player == null) {
-            return;
-        }
-
+    private void valescent$renderExperienceBarWidget(GuiGraphics guiGraphics, int x, CallbackInfo ci) {
+        Player player = this.minecraft.player;
         int nextExp = player.getXpNeededForNextLevel();
         if(nextExp > 0) {
             int k = (int) (player.experienceProgress * 183);
