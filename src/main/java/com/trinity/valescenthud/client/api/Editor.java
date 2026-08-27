@@ -12,7 +12,7 @@ import java.util.List;
 public final class Editor extends Screen {
     private final Screen parent;
 
-    private static final double SNAP_DISTANCE = 64.0;
+    private static final double SNAP_DISTANCE = 86;
 
     private static final SequencedSet<Widget<?>> selection = new LinkedHashSet<>(); //convert to array?
     private static Widget<?> hoveredWidget;
@@ -29,7 +29,7 @@ public final class Editor extends Screen {
     }
 
     public static Set<Widget<?>> getSelection() {
-        return selection;
+        return Collections.unmodifiableSequencedSet(selection);
     }
 
     private void updateAnchors() {
@@ -45,8 +45,6 @@ public final class Editor extends Screen {
         }
         doAnchorUpdate = false;
     }
-
-    private static final Map<String, Integer> fontSizes = new HashMap<>();
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -79,7 +77,7 @@ public final class Editor extends Screen {
 
             final float scale = 0.45f;
             final float dist = 4.0f;
-            int width = fontSizes.computeIfAbsent(id, font::width);
+            int width = font.width(id);
             float height = font.lineHeight * scale;
             float half = width * scale * 0.5f;
             float x = pos.x + widget.getWidth() * 0.5f;
@@ -209,17 +207,6 @@ public final class Editor extends Screen {
         }
     }
 
-    private void selectOnly(Widget<?> widget) {
-        selection.clear();
-        selection.add(widget);
-    }
-
-    private void toggleSelection(Widget<?> widget) {
-        if(!selection.add(widget)) {
-            selection.remove(widget);
-        }
-    }
-
     private double getAnchorX(Anchor anchor) {
         return anchorX[anchor.ordinal()];
     }
@@ -243,7 +230,8 @@ public final class Editor extends Screen {
                         return true;
                     }
                 } else if(!selection.contains(clicked)) {
-                    selectOnly(clicked);
+                    selection.clear();
+                    selection.add(clicked);
                 }
                 for(Widget<?> widget : selection) {
                     widget.onDrag(mouseX, mouseY);
@@ -262,7 +250,7 @@ public final class Editor extends Screen {
             return true;
         }
         if(button == 1) {
-            //quickmenu draw selection
+            //quickmenu draw
             return true;
         }
 
