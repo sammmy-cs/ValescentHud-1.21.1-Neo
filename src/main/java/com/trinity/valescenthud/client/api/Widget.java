@@ -2,15 +2,15 @@ package com.trinity.valescenthud.client.api;
 
 import com.trinity.valescenthud.client.api.render.Renderer;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import java.awt.Point;
 
-public final class Widget {
+public final class Widget<T extends Renderer> {
 
     private static final int HANDLE_SIZE = 5;
     //private static final int ANCHOR_SIZE = 4;
 
-    private final Renderer renderer;
+    private final String id;
+    private final T renderer;
     private final Point position = new Point(0, 0);
     private int width;
     private int height;
@@ -22,7 +22,8 @@ public final class Widget {
     private Anchor snapPreview;
     public boolean shouldUpdate = true;
 
-    public Widget(Renderer renderer, double offsetX, double offsetY, int width, int height, Anchor anchor) {
+    public Widget(String id, T renderer, double offsetX, double offsetY, int width, int height, Anchor anchor) {
+        this.id = id;
         this.renderer = renderer;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
@@ -190,6 +191,18 @@ public final class Widget {
     //public int getHeight() { return height; }
     //public double getOffsetX() { return offsetX; }
     //public double getOffsetY() { return offsetY; }
+    public String getId() {
+        return id;
+    }
+    public T getRenderer() {
+        return renderer;
+    }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
     public Anchor getPreview() {
         return snapPreview;
     }
