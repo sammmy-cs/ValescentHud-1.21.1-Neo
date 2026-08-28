@@ -9,12 +9,13 @@ public class StringRender implements Renderer {
     private static final Minecraft minecraft = Minecraft.getInstance();
 
     private String text;
-    private final int color;
+    private int color;
     private boolean dropShadow;
 
     public StringRender(String text, int color, boolean dropShadow) {
         this.text = text;
         this.color = color;
+        this.dropShadow = dropShadow;
     }
 
     @Override
