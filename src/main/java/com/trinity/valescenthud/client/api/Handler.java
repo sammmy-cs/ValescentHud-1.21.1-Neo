@@ -1,8 +1,8 @@
-package com.xnity.valescenthud.client.api;
+package com.trinity.valescenthud.client.api;
 
 import com.mojang.blaze3d.platform.Window;
+import com.trinity.valescenthud.client.api.render.Renderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,23 +11,22 @@ import net.neoforged.neoforge.client.event.RenderFrameEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 
 @EventBusSubscriber(modid = "valescenthud", value = Dist.CLIENT)
 public final class Handler {
 
-    private static final List<Widget> WIDGETS = new ArrayList<>();
-    private static final List<Widget> READ_WIDGETS = Collections.unmodifiableList(WIDGETS);
+    private static final List<Widget<?>> WIDGETS = new ArrayList<>();
+    private static final List<Widget<?>> READ_WIDGETS = Collections.unmodifiableList(WIDGETS);
 
     private static final Minecraft minecraft = Minecraft.getInstance();
     private static final Window window = minecraft.getWindow();
 
     public static int guiWidth, guiHeight;
 
-    public static List<Widget> getWidgets() { return READ_WIDGETS; }
+    public static List<Widget<?>> getWidgets() { return READ_WIDGETS; }
 
-    public static Widget addWidget(Widget widget) {
+    public static <T extends Renderer> Widget<T> addWidget(Widget<T> widget) {
         WIDGETS.add(widget);
         return widget;
     }
@@ -42,13 +41,13 @@ public final class Handler {
             guiHeight = actualHeight;
 
             Editor.doAnchorUpdate = true;
-            for(Widget widget: WIDGETS) {
+            for(Widget<?> widget: WIDGETS) {
                 widget.shouldUpdate = true;
             }
         }
     }
 
-    public static boolean removeWidget(Widget widget) {
+    public static boolean removeWidget(Widget<?> widget) {
         return WIDGETS.remove(widget);
     }
 
@@ -56,7 +55,7 @@ public final class Handler {
         WIDGETS.clear();
     }
 
-    public static boolean bringToFront(Widget widget) {
+    public static boolean bringToFront(Widget<?> widget) {
         if(!WIDGETS.remove(widget)) {
             return false;
         }
@@ -64,23 +63,11 @@ public final class Handler {
         return true;
     }
 
-    public static boolean sendToBack(Widget widget) {
+    public static boolean sendToBack(Widget<?> widget) {
         if(!WIDGETS.remove(widget)) {
             return false;
         }
         WIDGETS.addFirst(widget);
         return true;
-    }
-
-    public static Optional<Widget> getWidget(ResourceLocation texture) {
-        if(texture == null) {
-            return Optional.empty();
-        }
-        for(Widget widget : WIDGETS) {
-            if(texture.equals(widget.getTexture())) {
-                return Optional.of(widget);
-            }
-        }
-        return Optional.empty();
     }
 }
