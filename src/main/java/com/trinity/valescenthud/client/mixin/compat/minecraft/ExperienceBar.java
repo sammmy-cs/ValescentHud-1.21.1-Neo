@@ -30,8 +30,8 @@ public class ExperienceBar {
     private Minecraft minecraft;
 
     @Unique
-    private static final Widget valescent$experienceBarBackground = Handler.addWidget(new Widget(
-            new SpriteRender(EXPERIENCE_BAR_BACKGROUND_SPRITE), 0, -22, 182, 5, Anchor.BOTTOM
+    private static final Widget<SpriteRender> valescent$experienceBarBackground = Handler.addWidget(new Widget<>(
+            "minecraft:experience_bar", new SpriteRender(EXPERIENCE_BAR_BACKGROUND_SPRITE), 0, -22, 182, 5, Anchor.BOTTOM
     ));
 
 
